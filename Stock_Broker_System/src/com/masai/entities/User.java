@@ -4,11 +4,11 @@ public class User implements Serializable {
 private	String email;
 private	String username;
 private	String password;
-private String panCard;
+private Long panCard;
 public User(){
 	super();
 }
-public User(String email, String username, String password, String panCard) {
+public User(String email, String username, String password, Long panCard) {
 	this.email = email;
 	this.username = username;
 	this.password = password;
@@ -32,10 +32,10 @@ public String getPassword() {
 public void setPassword(String password) {
 	this.password = password;
 }
-public String getPanCard() {
+public Long getPanCard() {
 	return panCard;
 }
-public void setPanCard(String panCard) {
+public void setPanCard(Long panCard) {
 	this.panCard = panCard;
 }
 @Override

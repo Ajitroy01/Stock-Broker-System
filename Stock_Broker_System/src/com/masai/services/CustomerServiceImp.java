@@ -1,8 +1,10 @@
 package com.masai.services;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import com.masai.entities.Customer;
 import com.masai.entities.Stocks;
 import com.masai.entities.Transaction;
@@ -22,7 +24,7 @@ public void signUp(Customer cus, Map<String, Customer> customers) throws Duplica
 }
 @Override
 public boolean login(String email, String password, Map<String, Customer> customers) throws InvalidDetailsException {
-	if(customers.containsKey(email)) {
+	if(customers != null && customers.containsKey(email)) {
 		if(customers.get(email).getPassword().equals(password)) {
 			return true;
 		}
@@ -94,6 +96,7 @@ public List<Customer> viewAllCustomers(Map<String, Customer> customers) throws I
 	 List<Customer> list = null;
 	 if(customers != null && customers.size() > 0) {
 		 Collection<Customer> coll = customers.values();
+		 list = new ArrayList<>(coll);
 	 }
 	 else {
 		 throw new InvalidDetailsException("Customer list is Empty.");
