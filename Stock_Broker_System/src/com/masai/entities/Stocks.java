@@ -52,6 +52,6 @@ public void setPrice(double price) {
 }
 @Override
 public String toString() {
-	return "Stocks [id=" + id + ", company=" + company + ", stockName=" + stockName + ", price=" + price + "]";
+	return "ID : "+id+"    " +"Company : "+company + "    " + "Name : " + stockName + "     " +"Quantity : " + quantity +"   "  + "Price  : " +price; 
 }
 }

@@ -1,11 +1,11 @@
 package com.masai.entities;
 
 public class Customer extends User{
-private double walletBalance;
+private transient double walletBalance;
 public Customer() {
 	super();
 }
-public Customer(String email, String username, String password, String panCard, double w) {
+public Customer(String email, String username, String password, Long panCard, double w) {
 	super(email, username, password, panCard);
 	this.walletBalance = w;
 }
@@ -17,6 +17,6 @@ public void setWalletBalance(double walletBalance) {
 }
 @Override
 public String toString() {
-	return "Customer [walletBalance=" + walletBalance + "]";
+	return "Name : " +super.getUsername() + "  " + "Email : " + super.getEmail() +"  " + "Pan : " + super.getPanCard();
 }
 }
