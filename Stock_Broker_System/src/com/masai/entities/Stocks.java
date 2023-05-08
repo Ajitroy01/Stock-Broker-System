@@ -3,22 +3,20 @@ import java.io.Serializable;
 public class Stocks  implements Serializable{
 private int id;
 private String company;
-private static int quantity;
-static {
-	quantity = 500;
-}
+private int quantity;
 private String stockName;
 private double price;
 
 public Stocks() {
 	super();
 }
-public Stocks(int id, String company, String stockName, double price) {
+public Stocks(int id, String company, String stockName, double price, int qty) {
 	super();
 	this.id = id;
 	this.company = company;
 	this.stockName = stockName;
 	this.price = price;
+	this.quantity = qty;
 }
 public int getId() {
 	return id;
@@ -32,7 +30,7 @@ public String getCompany() {
 public void setCompany(String company) {
 	this.company = company;
 }
-public static int getQuantity() {
+public int getQuantity() {
 	return quantity;
 }
 public void setQuantity(int quantity) {

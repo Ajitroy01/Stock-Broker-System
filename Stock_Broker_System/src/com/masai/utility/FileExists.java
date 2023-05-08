@@ -5,9 +5,11 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.masai.entities.Customer;
 import com.masai.entities.Stocks;
 import com.masai.entities.Transaction;
@@ -23,7 +25,7 @@ public static Map<Integer, Stocks> stocksFile(){
 		}
 		if(flag) {
 			stocks = new LinkedHashMap<>();
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f,true)); 
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f)); 
 			oos.writeObject(stocks);
 			return stocks;
 		}
@@ -48,8 +50,8 @@ public static Map<String, Customer> customerFile(){
 			flag = true;
 		}
 		if(flag) {
-			cus = new LinkedHashMap<>();
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f,true)); 
+			cus = new HashMap<>();
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f)); 
 			oos.writeObject(cus);
 			return cus;
 		}
@@ -75,7 +77,7 @@ public static List<Transaction> transactionFile() {
 		}
 		if (flag) {
 			trans =  new ArrayList<>();
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f,true));
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
 			oos.writeObject(trans);
 			return trans;
 		} else {

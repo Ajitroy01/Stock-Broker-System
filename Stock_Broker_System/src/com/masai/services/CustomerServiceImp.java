@@ -15,10 +15,10 @@ import com.masai.exceptions.TransactionException;
 public class CustomerServiceImp implements CustomerService {
 @Override
 public void signUp(Customer cus, Map<String, Customer> customers) throws DuplicateDataException{
-	if(customers.containsKey(cus.getEmail())) {
+	if(customers != null && customers.containsKey(cus.getEmail())) {
 		throw new DuplicateDataException("Account already exists, Please LogIn.");
 	}
-	else {
+	else if(customers != null){
 		customers.put(cus.getEmail(), cus);
 	}
 }
@@ -75,7 +75,44 @@ public boolean addMoneyToWallet(double amount, String email, Map<String, Custome
 	customers.put(email, cus);
 	return true;
 }
-
+@Override
+public boolean WithdrawMoneyFromWallet(double amount, String email, Map<String, Customer> customers) throws TransactionException {
+	Customer cus = customers.get(email);
+	if(cus.getWalletBalance() >= amount) {
+		cus.setWalletBalance(cus.getWalletBalance() - amount);
+		customers.put(email, cus);
+		return true;
+	}
+	else {
+		throw new TransactionException("Not enough money to widthdraw.");
+	}
+}
+@Override
+public boolean sellStock(int id, int qty, double price, String email, Map<Integer, Stocks> stock,
+		Map<String, Customer> customers, List<Transaction> transactions)
+		throws InvalidDetailsException,StockException{
+	if(stock.containsKey(id)) {
+		int loss;
+		int profit;
+		Stocks s = stock.get(id);
+			Customer cus  = customers.get(email);
+			double sellingPrice = qty*price;
+			double margin =  sellingPrice - (qty * s.getPrice());
+			if(margin < 1) {
+				System.out.println("Stock has been sold and you have made a loss of "+ margin);
+			}
+			else {
+				System.out.println("Stock has been sold and you have made a profit of "+ margin);
+			}
+			cus.setWalletBalance(cus.getWalletBalance() + sellingPrice);
+			Transaction tr = new Transaction(cus.getUsername(), email, id, s.getStockName(), qty,price, sellingPrice, LocalDate.now());
+			transactions.add(tr);
+			return true;
+	}
+	else {
+		throw new InvalidDetailsException(id +" No stock exist with this id.");
+	}
+}
 @Override
 public double viewWalletBalance(String email, Map<String, Customer> customers) {
 	Customer cus = customers.get(email);
