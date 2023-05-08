@@ -29,16 +29,17 @@ public class Main {
 		CustomerService cusservice = new CustomerServiceImp();
 	   StocksService  stockservice = new   StocksServiceImp();
 	   TransactionService trservice = new TransactionServiceImp();
-		int choice = 0;
-		try {
+	   int choice = 0;
 			do {
+				try {
 				System.out.println("Press 1 -> Add Stock");
 				System.out.println("Press 2 -> View All Stock");
 				System.out.println("Press 3 -> Delete any Stock");
 				System.out.println("Press 4 -> Update any Stock");
 				System.out.println("Press 5 -> View All Customers");
-				System.out.println("Press 6 -> View All Transactions");
-				System.out.println("Press 7 ->  Log Out !");
+				System.out.println("Press 6 -> Delete Any Customer");
+				System.out.println("Press 7 -> View All Transactions");
+				System.out.println("Press 8 ->  Log Out !");
 				choice = sc.nextInt();
 				switch(choice) {
 				case 1 : String msg = brokerAddStock(sc, stock, stockservice);
@@ -53,17 +54,19 @@ public class Main {
 				break;
 				case 5 : brokerViewAllCustomer(cus, cusservice);
 				break;
-				case 6 : brokerViewAllTransaction( transactions, trservice);
+				case 6 : brokerDeleteCustomer(sc, cus);
 				break;
-				case 7 : System.out.println("Logout Successfull.");
+				case 7 : brokerViewAllTransaction( transactions, trservice);
+				break;
+				case 8 : System.out.println("Logout Successfull.");
 				break;
 				default : 
 					throw new IllegalArgumentException("Wrong Value : " + choice);
 				} 
-			} while(choice <=6);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+			} while(choice <=7);
 	}
 	public static void brokerLogin(Scanner sc) throws InvalidDetailsException {
 		System.out.println("Enter your UserName");
@@ -86,7 +89,7 @@ public class Main {
 		String name = sc.next();
 		System.out.println("Please enter price of the stock.");
 		double p = sc.nextDouble();
-		Stocks stocks = new Stocks(IdGenerator.generateId(), company, name, p);
+		Stocks stocks = new Stocks(IdGenerator.generateId(), company, name, p, 500);
 		str = stockservice.addStock(stocks, stock);
 		return str;
 	}
@@ -111,7 +114,7 @@ public class Main {
 		String name = sc.next();
 		System.out.println("Please enter price of the stock.");
 		double p = sc.nextDouble();
-		Stocks s = new Stocks(IdGenerator.generateId(), company, name, p);
+		Stocks s = new Stocks(IdGenerator.generateId(), company, name, p, 500);
 		str = stockservice.updateStock(id, s, stock);
 		return str;
 	}
@@ -120,6 +123,16 @@ public class Main {
 		for(Customer c : list) {
 				System.out.println(c);
 		}
+	}
+	public static boolean brokerDeleteCustomer(Scanner sc, Map<String, Customer> cus) {
+		System.out.println("Please enter Email of Customer.");
+		 String email = sc.next();
+		if(cus.size() > 0 &&  cus.containsKey(email)) {
+			cus.remove(email);
+			System.out.println("Customer Deleted from App.");
+			return true;
+		}
+		return false;
 	}
 	public static void brokerViewAllTransaction(List<Transaction> transactions, TransactionService transactionService) throws TransactionException {
 		List<Transaction> alltr = transactionService.viewAllTransactions(transactions);
@@ -140,16 +153,18 @@ public class Main {
 		   String pass = sc.next();
 		   customerLogIn(email, pass, cus, cusservice);
 		   int choice = 0;
-		   try {
 			   do {
+				   try {
 				   System.out.println("Please select an option");
 				   System.out.println("Press 1 ->  To View All Stocks");
 				   System.out.println("Press 2 -> To Buy Any Stock");
 				   System.out.println("Press 3 -> Add Money to Wallet");
-				   System.out.println("Press 4 -> View Wallet Balance");
-				   System.out.println("Press 5 -> View My Account Details");
-				   System.out.println("Press 6 -> View My Transactions");
-				   System.out.println("Press 7 -> Logout.");
+				   System.out.println("Press 4 -> To Sell Any Stock");
+				   System.out.println("Press 5 -> View Wallet Balance");
+				   System.out.println("Press 6 -> Widthraw Money from Wallet");
+				   System.out.println("Press 7 -> View My Account Details");
+				   System.out.println("Press 8 -> View My Transactions");
+				   System.out.println("Press 9 -> Logout.");
 				   choice = sc.nextInt();  
 				   switch (choice) {
 					case 1:
@@ -164,40 +179,54 @@ public class Main {
 						System.out.println(moneyAdded);
 						break;
 					case 4:
+						customerSellStock(sc, email, stock, cus, transactions, cusservice);
+						break;
+					case 5:
 						double walletBalance = customerViewWalletBalance(email, cus, cusservice);
 						System.out.println("Wallet balance is: " + walletBalance);
 						break;
-					case 5:
-						customerViewMyDetails(email, cus, cusservice);
-						break;
 					case 6:
-						customerViewCustomerTransactions(email, transactions, trservice);
+						String moneydebit = customerWithdrawMoneyFromWallet(sc, email, cus, cusservice);
+						System.out.println(moneydebit);
 						break;
 					case 7:
+						customerViewMyDetails(email, cus, cusservice);
+						break;
+					case 8:
+						customerViewCustomerTransactions(email, transactions, trservice);
+						break;
+					case 9:
 						System.out.println("you have successsfully logout");
 						break;
 					default:
 						System.out.println("invalid choice");
 						break;
 					}
-				} while (choice <= 6);
-			} catch (Exception e) {
+				   }
+			 catch (Exception e) {
 				System.out.println(e.getMessage());
-			}
+			 }
+			} while (choice <= 8);
 		}
 	public static void customerSignUp(Scanner sc, Map<String, Customer> cus ) throws DuplicateDataException {
-		System.out.println("Please enter the following details to create Account -:");
+		System.out.println("Please enter the following details to create Demat Account -:");
 		System.out.println("Please enter Email");
 		String email = sc.next();
-		System.out.println("Please enter Name");
-		String name = sc.next();
+		System.out.println("Please enter Firstname");
+		String fname = sc.next();
+		System.out.println("Please enter Lastname");
+		String lname = sc.next();
+		System.out.println("Please enter Username");
+		String username = sc.next();
 		System.out.println("Please enter Password");
 		String pass = sc.next();
-		System.out.println("Please enter PAN Details");
-		Long pan = sc.nextLong();
+		System.out.println("Please enter Address Details");
+		String Address = sc.next();
+		System.out.println("Please enter Mobile Number");
+		Long mobile = sc.nextLong();
 		System.out.println("Please enter amount to be added in your Wallet.");
 		Double amount = sc.nextDouble();
-		Customer c = new Customer(email, name, pass, pan, amount);
+		Customer c = new Customer(email, fname, lname, username, pass, Address, mobile, amount );
 		CustomerService cs = new CustomerServiceImp();
 		cs.signUp(c, cus);
 		System.out.println("Account Created Successfully.");	
@@ -226,7 +255,25 @@ public class Main {
 		double money = sc.nextDouble();
 		boolean added = cusservice.addMoneyToWallet(money, email, customers);
 
-		return "Amount: " + money + " Added to your wallet.";
+		return "Amount: " + money + " Credited to your wallet.";
+	}
+	public static String customerWithdrawMoneyFromWallet(Scanner sc, String email, Map<String, Customer> customers,
+			CustomerService cusservice) throws TransactionException {
+		System.out.println("Please enter the amount");
+		double money = sc.nextDouble();
+		boolean widthdraw = cusservice.WithdrawMoneyFromWallet(money, email, customers);
+		return "Amount: " + money + " is debited from your wallet and added to your Bank Account.";
+	}
+	public static void customerSellStock(Scanner sc, String email, Map<Integer, Stocks> stock,
+			Map<String, Customer> customers, List<Transaction> transactions, CustomerService cusservice)
+			throws InvalidDetailsException, StockException, TransactionException {
+		System.out.println("Please Enter the Stock ID");
+		int id = sc.nextInt();
+		System.out.println("Please Enter Quantity.");
+		int qty = sc.nextInt();
+		System.out.println("Please Enter Selling Price.");
+		int price = sc.nextInt();
+		cusservice.sellStock(id, qty, price, email, stock, customers, transactions);
 	}
 	public static double customerViewWalletBalance(String email, Map<String, Customer> customers,
 			CustomerService cusservice) {
@@ -236,9 +283,10 @@ public class Main {
 	public static void customerViewMyDetails(String email, Map<String, Customer> customers,
 			CustomerService cusservice) {
 		Customer cus = cusservice.viewCustomerDetails(email, customers);
-		System.out.println("Name : " + cus.getUsername());
-		System.out.println("Pan : " + cus.getPanCard());
+		System.out.println("Name : " + cus.getFname());
+		System.out.println("Username : " + cus.getUsername());
 		System.out.println("Email : " + cus.getEmail());
+		System.out.println("Address : " + cus.getAddress());
 		System.out.println("Wallet Balance : " + cus.getWalletBalance());
 	}
 	public static void customerViewCustomerTransactions(String email, List<Transaction> transactions,
@@ -251,13 +299,15 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
+		
 				Map<Integer, Stocks> stocks = FileExists.stocksFile();
 				Map<String, Customer> customers = FileExists.customerFile();
 				List<Transaction> transactions = FileExists.transactionFile();
 				Scanner sc = new Scanner(System.in);
 				System.out.println("Welcome , in Stock Broker System");
+				int preference = 0;
+				do {
 				try {
-					int preference = 0;
 					do {
 						System.out.println("Please enter your preference");
 						System.out.println("Press 1 : Broker Login");
@@ -283,9 +333,10 @@ public class Main {
 						}
 					}
 					while (preference != 0);
-				} catch (Exception e) {
+				}catch (Exception e) {
 					System.out.println(e.getMessage());
-				} finally {
+				}
+				finally {
 					try {
 						ObjectOutputStream poos = new ObjectOutputStream(new FileOutputStream("Stocks.ser"));
 						poos.writeObject(stocks);
@@ -297,6 +348,7 @@ public class Main {
 						System.out.println(e.getMessage());
 					}
 				}
-			}
+			}while (preference != 0);
+	}
 	}
 

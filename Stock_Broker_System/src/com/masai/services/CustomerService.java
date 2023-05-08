@@ -15,6 +15,10 @@ public interface CustomerService {
 			Map<String, Customer> customers, List<Transaction> transactions)
 			throws InvalidDetailsException,TransactionException,StockException;
 	public boolean addMoneyToWallet(double amount, String email, Map<String, Customer> customers);
+	public boolean WithdrawMoneyFromWallet(double amount, String email, Map<String, Customer> customers) throws TransactionException;
+	public boolean sellStock(int id, int qty, double price,String email, Map<Integer, Stocks> stock,
+			Map<String, Customer> customers, List<Transaction> transactions)
+			throws InvalidDetailsException,TransactionException,StockException;
 	public double viewWalletBalance(String email, Map<String, Customer> customers);
 	public Customer viewCustomerDetails(String email, Map<String, Customer> customers);
 	public List<Customer> viewAllCustomers(Map<String, Customer> customers) throws InvalidDetailsException;

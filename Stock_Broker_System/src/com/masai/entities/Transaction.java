@@ -76,7 +76,7 @@ public void setDt(LocalDate dt) {
 }
 @Override
 public String toString() {
-	return "Transaction [username=" + username + ", email=" + email + ", id=" + id + ", stockName=" + stockName
-			+ ", quantity=" + quantity + ", price=" + price + ", total=" + total + ", dt=" + dt + "]";
+	return "Name :  " + username + "  Email : " + email + "  Stock ID : " + id + "  StockName : " + stockName
+			+ "  Quantity : " + quantity + "  Price : " + price + "  Total : " + total + "  Date : " + dt;
 }
 }

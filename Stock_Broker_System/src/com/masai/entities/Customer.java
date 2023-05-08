@@ -5,10 +5,12 @@ private transient double walletBalance;
 public Customer() {
 	super();
 }
-public Customer(String email, String username, String password, Long panCard, double w) {
-	super(email, username, password, panCard);
+public Customer(String email, String fname, String lname, String username, String password, String address,
+		Long mobile, double w) {
+	super(email, fname, lname, username, password, address, mobile);
 	this.walletBalance = w;
 }
+
 public double getWalletBalance() {
 	return walletBalance;
 }
@@ -17,6 +19,6 @@ public void setWalletBalance(double walletBalance) {
 }
 @Override
 public String toString() {
-	return "Name : " +super.getUsername() + "  " + "Email : " + super.getEmail() +"  " + "Pan : " + super.getPanCard();
+	return "Name : " +super.getFname() + "  " + "Email : " + super.getEmail() +"  " + "Mobile : " + super.getMobile();
 }
 }
