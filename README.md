@@ -2,7 +2,7 @@
 
 
 <h1> Stock Broker System </h1>
-<p> This project is about a broker managing different customers account and it is build using java languange in span of 3 days.
+<p> This project is about a broker managing different customers account and it is build using java languange in span of 3 days.</p>
 
 <h3> Accounts </h3>
 <p> 1.Broker </p>
